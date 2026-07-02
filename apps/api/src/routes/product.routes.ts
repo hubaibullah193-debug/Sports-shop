@@ -1,22 +1,21 @@
-import { Router, Response } from 'express';
-import { query, param, validationResult } from 'express-validator';
+import { Router, Response, NextFunction, Request } from 'express';
 import prisma from '../utils/prisma';
-import { NotFoundError, ValidationError } from '../types/errors';
-import { AuthRequest } from '../middleware/auth';
+import { NotFoundError } from '../types/errors';
 
 const router = Router();
 
-const validateRequest = (req: any, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new ValidationError('Validation failed', errors.array());
-  }
-};
-
 // Get all products with filtering
-router.get('/', async (req: AuthRequest, res: Response) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { category, brand, minPrice, maxPrice, search, skip = 0, take = 20 } = req.query;
+    const { category, brand, minPrice, maxPrice, search, skip = '0', take = '20' } = req.query as {
+      category?: string;
+      brand?: string;
+      minPrice?: string;
+      maxPrice?: string;
+      search?: string;
+      skip?: string;
+      take?: string;
+    };
 
     const where: any = { isActive: true };
 
@@ -36,8 +35,8 @@ router.get('/', async (req: AuthRequest, res: Response) => {
 
     if (search) {
       where.OR = [
-        { name: { contains: search as string, mode: 'insensitive' } },
-        { description: { contains: search as string, mode: 'insensitive' } },
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -66,14 +65,14 @@ router.get('/', async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get single product
-router.get('/:slug', async (req: AuthRequest, res: Response) => {
+router.get('/:slug', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { slug } = req.params;
+    const { slug } = req.params as { slug: string };
 
     const product = await prisma.product.findUnique({
       where: { slug },
@@ -95,15 +94,15 @@ router.get('/:slug', async (req: AuthRequest, res: Response) => {
 
     res.json(product);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get related products
-router.get('/:slug/related', async (req: AuthRequest, res: Response) => {
+router.get('/:slug/related', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { slug } = req.params;
-    const { take = 5 } = req.query;
+    const { slug } = req.params as { slug: string };
+    const { take = '5' } = req.query as { take?: string };
 
     const product = await prisma.product.findUnique({
       where: { slug },
@@ -129,7 +128,7 @@ router.get('/:slug/related', async (req: AuthRequest, res: Response) => {
 
     res.json(related);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

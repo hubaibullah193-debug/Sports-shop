@@ -1,20 +1,11 @@
-import { Router, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { Router, Response, NextFunction } from 'express';
 import prisma from '../utils/prisma';
-import { authenticate } from '../middleware/auth';
-import { AuthRequest, ValidationError } from '../types/errors';
+import { authenticate, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
-const validateRequest = (req: any, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    throw new ValidationError('Validation failed', errors.array());
-  }
-};
-
 // Get analytics dashboard
-router.get('/analytics', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/analytics', authenticate, async (_req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
@@ -45,6 +36,7 @@ router.get('/analytics', authenticate, async (req: AuthRequest, res: Response) =
       prisma.orderItem.groupBy({
         by: ['productId'],
         _sum: { quantity: true },
+        orderBy: { productId: 'asc' },
         take: 10,
         where: {
           order: {
@@ -67,16 +59,16 @@ router.get('/analytics', authenticate, async (req: AuthRequest, res: Response) =
       revenueByDay,
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get inventory alerts
-router.get('/inventory-alerts', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/inventory-alerts', authenticate, async (_req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const alerts = await prisma.product.findMany({
       where: {
-        stock: { lte: prisma.product.fields.lowStockAlert },
+        stock: { lte: 10 },
       },
       include: { category: true },
       orderBy: { stock: 'asc' },
@@ -84,12 +76,12 @@ router.get('/inventory-alerts', authenticate, async (req: AuthRequest, res: Resp
 
     res.json(alerts);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get customer insights
-router.get('/customer-insights', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/customer-insights', authenticate, async (_req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const [
       totalCustomers,
@@ -127,7 +119,7 @@ router.get('/customer-insights', authenticate, async (req: AuthRequest, res: Res
       topCustomers,
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

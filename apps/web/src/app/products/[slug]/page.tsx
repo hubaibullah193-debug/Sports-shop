@@ -9,7 +9,7 @@ import { useCartStore } from '@/store/cartStore';
 import { formatPrice } from '@/utils/helpers';
 import toast from 'react-hot-toast';
 import apiClient from '@/utils/api';
-import { Product, Review } from '@/types';
+import { Product } from '@/types';
 
 export default function ProductPage() {
   const params = useParams();
@@ -153,20 +153,6 @@ export default function ProductPage() {
                 <p className="text-gray-600">{product.description}</p>
               </div>
 
-              {/* Specifications */}
-              {product.specifications && product.specifications.length > 0 && (
-                <div className="mb-8 pb-8 border-b">
-                  <h3 className="font-bold mb-4">Specifications</h3>
-                  <div className="space-y-2">
-                    {product.specifications.map((spec, idx) => (
-                      <div key={idx} className="flex justify-between">
-                        <span className="text-gray-600">{spec.key}</span>
-                        <span className="font-semibold">{spec.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Add to Cart */}
               <div className="space-y-4">

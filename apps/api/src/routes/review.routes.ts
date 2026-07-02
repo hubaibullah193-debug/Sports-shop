@@ -1,12 +1,12 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../utils/prisma';
-import { authenticate } from '../middleware/auth';
-import { AuthRequest, ValidationError } from '../types/errors';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { ValidationError } from '../types/errors';
 
 const router = Router();
 
-const validateRequest = (req: any) => {
+const validateRequest = (req: any): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ValidationError('Validation failed', errors.array());
@@ -22,10 +22,15 @@ router.post(
     body('rating').isInt({ min: 1, max: 5 }),
     body('title').notEmpty(),
   ],
-  async (req: AuthRequest, res: Response) => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
       validateRequest(req);
-      const { productId, rating, title, comment } = req.body;
+      const { productId, rating, title, comment } = req.body as {
+        productId: string;
+        rating: number;
+        title: string;
+        comment?: string;
+      };
 
       const review = await prisma.review.create({
         data: {
@@ -43,16 +48,16 @@ router.post(
         review,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );
 
 // Get product reviews
-router.get('/product/:productId', async (req: AuthRequest, res: Response) => {
+router.get('/product/:productId', async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { productId } = req.params;
-    const { skip = 0, take = 10 } = req.query;
+    const { productId } = req.params as { productId: string };
+    const { skip = 0, take = 10 } = req.query as { skip?: string; take?: string };
 
     const reviews = await prisma.review.findMany({
       where: { productId },
@@ -80,7 +85,7 @@ router.get('/product/:productId', async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

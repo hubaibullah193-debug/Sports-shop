@@ -10,21 +10,24 @@ interface AuthState {
   setToken: (token: string | null) => void;
   setLoading: (loading: boolean) => void;
   logout: () => void;
+  hydrate: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  token: localStorage.getItem('token'),
+  token: null,
   isLoading: false,
-  isAuthenticated: !!localStorage.getItem('token'),
+  isAuthenticated: false,
 
   setUser: (user) => set({ user }),
 
   setToken: (token) => {
-    if (token) {
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      if (token) {
+        localStorage.setItem('token', token);
+      } else {
+        localStorage.removeItem('token');
+      }
     }
     set({ token, isAuthenticated: !!token });
   },
@@ -32,7 +35,16 @@ export const useAuthStore = create<AuthState>((set) => ({
   setLoading: (loading) => set({ isLoading: loading }),
 
   logout: () => {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
     set({ user: null, token: null, isAuthenticated: false });
+  },
+
+  hydrate: () => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      set({ token, isAuthenticated: !!token });
+    }
   },
 }));

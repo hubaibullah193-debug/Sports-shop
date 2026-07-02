@@ -63,7 +63,7 @@ export default function WishlistPage() {
         ) : items.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-lg text-gray-600 mb-4">Your wishlist is empty</p>
-            <Button href="/shop">Continue Shopping</Button>
+            <Button onClick={() => window.location.href = '/shop'}>Continue Shopping</Button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

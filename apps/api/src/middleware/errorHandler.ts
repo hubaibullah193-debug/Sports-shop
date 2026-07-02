@@ -3,17 +3,18 @@ import { ApiError } from '../types/errors';
 
 export const errorHandler = (
   error: Error | ApiError,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
-) => {
+  _next: NextFunction
+): void => {
   console.error('Error:', error);
 
   if (error instanceof ApiError) {
-    return res.status(error.statusCode).json({
+    res.status(error.statusCode).json({
       error: error.message,
       details: error.details,
     });
+    return;
   }
 
   res.status(500).json({

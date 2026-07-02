@@ -1,12 +1,12 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import prisma from '../utils/prisma';
 
 const router = Router();
 
 // Get all gallery images
-router.get('/', async (req: any, res: Response) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { category, skip = 0, take = 12 } = req.query;
+    const { category, skip = '0', take = '12' } = req.query as { category?: string; skip?: string; take?: string };
 
     const where: any = {};
     if (category) {
@@ -32,21 +32,21 @@ router.get('/', async (req: any, res: Response) => {
       },
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get gallery categories
-router.get('/categories', async (req: any, res: Response) => {
+router.get('/categories', async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const categories = await prisma.galleryImage.findMany({
       distinct: ['category'],
       select: { category: true },
     });
 
-    res.json(categories.map((c) => c.category).filter(Boolean));
+    res.json(categories.map((c: any) => c.category).filter(Boolean));
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

@@ -1,12 +1,12 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import prisma from '../utils/prisma';
 
 const router = Router();
 
 // Get all brands
-router.get('/', async (req: any, res: Response) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { skip = 0, take = 20 } = req.query;
+    const { skip = '0', take = '20' } = _req.query as { skip?: string; take?: string };
 
     const [brands, total] = await Promise.all([
       prisma.brand.findMany({
@@ -24,14 +24,14 @@ router.get('/', async (req: any, res: Response) => {
       take: Number(take),
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get brand by slug
-router.get('/:slug', async (req: any, res: Response) => {
+router.get('/:slug', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { slug } = req.params;
+    const { slug } = req.params as { slug: string };
 
     const brand = await prisma.brand.findUnique({
       where: { slug },
@@ -44,12 +44,13 @@ router.get('/:slug', async (req: any, res: Response) => {
     });
 
     if (!brand) {
-      return res.status(404).json({ error: 'Brand not found' });
+      res.status(404).json({ error: 'Brand not found' });
+      return;
     }
 
     res.json(brand);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

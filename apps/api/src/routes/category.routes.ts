@@ -1,11 +1,10 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import prisma from '../utils/prisma';
-import { AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
 // Get all categories
-router.get('/', async (req: AuthRequest, res: Response) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const categories = await prisma.category.findMany({
       where: { parentId: null },
@@ -17,14 +16,14 @@ router.get('/', async (req: AuthRequest, res: Response) => {
 
     res.json(categories);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get category by slug
-router.get('/:slug', async (req: AuthRequest, res: Response) => {
+router.get('/:slug', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { slug } = req.params;
+    const { slug } = req.params as { slug: string };
 
     const category = await prisma.category.findUnique({
       where: { slug },
@@ -35,12 +34,13 @@ router.get('/:slug', async (req: AuthRequest, res: Response) => {
     });
 
     if (!category) {
-      return res.status(404).json({ error: 'Category not found' });
+      res.status(404).json({ error: 'Category not found' });
+      return;
     }
 
     res.json(category);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

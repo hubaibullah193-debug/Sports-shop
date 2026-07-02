@@ -1,12 +1,12 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import prisma from '../utils/prisma';
-import { authenticate, authorize } from '../middleware/auth';
-import { AuthRequest, NotFoundError, ValidationError } from '../types/errors';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { NotFoundError, ValidationError } from '../types/errors';
 
 const router = Router();
 
 // Get user orders
-router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const orders = await prisma.order.findMany({
       where: { userId: req.user!.id },
@@ -16,14 +16,14 @@ router.get('/', authenticate, async (req: AuthRequest, res: Response) => {
 
     res.json(orders);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get single order
-router.get('/:orderNumber', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/:orderNumber', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { orderNumber } = req.params;
+    const { orderNumber } = req.params as { orderNumber: string };
 
     const order = await prisma.order.findFirst({
       where: {
@@ -39,14 +39,19 @@ router.get('/:orderNumber', authenticate, async (req: AuthRequest, res: Response
 
     res.json(order);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Create order
-router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
+router.post('/', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { items, shippingAddress, billingAddress, paymentMethod } = req.body;
+    const { items, shippingAddress, billingAddress, paymentMethod } = req.body as {
+      items: Array<{ productId: string; quantity: number }>;
+      shippingAddress: string;
+      billingAddress?: string;
+      paymentMethod: string;
+    };
 
     if (!items || items.length === 0) {
       throw new ValidationError('No items in order');
@@ -95,7 +100,7 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
         total,
         shippingAddress,
         billingAddress: billingAddress || shippingAddress,
-        paymentMethod,
+        paymentMethod: paymentMethod as any, // Type matches database enum
       },
       include: { items: { include: { product: true } } },
     });
@@ -105,7 +110,7 @@ router.post('/', authenticate, async (req: AuthRequest, res: Response) => {
       order,
     });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

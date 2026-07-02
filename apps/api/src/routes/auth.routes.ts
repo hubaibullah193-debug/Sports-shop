@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../utils/prisma';
 import { hashPassword, comparePasswords, generateToken } from '../utils/auth';
@@ -8,7 +8,7 @@ import { AuthRequest, authenticate } from '../middleware/auth';
 const router = Router();
 
 // Validation middleware
-const validateRequest = (req: any, res: Response) => {
+const validateRequest = (req: any): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ValidationError('Validation failed', errors.array());
@@ -24,10 +24,15 @@ router.post(
     body('firstName').notEmpty().trim(),
     body('lastName').notEmpty().trim(),
   ],
-  async (req: AuthRequest, res: Response) => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validateRequest(req, res);
-      const { email, password, firstName, lastName } = req.body;
+      validateRequest(req);
+      const { email, password, firstName, lastName } = req.body as {
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+      };
 
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
@@ -64,7 +69,7 @@ router.post(
         token,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );
@@ -76,10 +81,10 @@ router.post(
     body('email').isEmail().normalizeEmail(),
     body('password').notEmpty(),
   ],
-  async (req: AuthRequest, res: Response) => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validateRequest(req, res);
-      const { email, password } = req.body;
+      validateRequest(req);
+      const { email, password } = req.body as { email: string; password: string };
 
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
@@ -109,13 +114,13 @@ router.post(
         token,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );
 
 // Get current user
-router.get('/me', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/me', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user!.id },
@@ -136,7 +141,7 @@ router.get('/me', authenticate, async (req: AuthRequest, res: Response) => {
 
     res.json(user);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

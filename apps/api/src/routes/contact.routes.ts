@@ -1,11 +1,11 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../utils/prisma';
 import { ValidationError } from '../types/errors';
 
 const router = Router();
 
-const validateRequest = (req: any, res: Response) => {
+const validateRequest = (req: any): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ValidationError('Validation failed', errors.array());
@@ -21,10 +21,16 @@ router.post(
     body('subject').notEmpty().trim(),
     body('message').notEmpty().trim(),
   ],
-  async (req: any, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validateRequest(req, res);
-      const { name, email, phone, subject, message } = req.body;
+      validateRequest(req);
+      const { name, email, phone, subject, message } = req.body as {
+        name: string;
+        email: string;
+        phone?: string;
+        subject: string;
+        message: string;
+      };
 
       const contact = await prisma.contactMessage.create({
         data: {
@@ -41,22 +47,22 @@ router.post(
         contact,
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );
 
 // Get all FAQs
-router.get('/faq', async (req: any, res: Response) => {
+router.get('/faq', async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const faqs = await prisma.faq.findMany({
+    const faqs = await prisma.fAQ.findMany({
       where: { isActive: true },
       orderBy: { order: 'asc' },
     });
 
     res.json(faqs);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
@@ -64,17 +70,18 @@ router.get('/faq', async (req: any, res: Response) => {
 router.post(
   '/newsletter',
   [body('email').isEmail().normalizeEmail()],
-  async (req: any, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validateRequest(req, res);
-      const { email, name } = req.body;
+      validateRequest(req);
+      const { email, name } = req.body as { email: string; name?: string };
 
       const existing = await prisma.newsletterSubscriber.findUnique({
         where: { email },
       });
 
       if (existing && existing.isActive) {
-        return res.status(400).json({ error: 'Already subscribed' });
+        res.status(400).json({ error: 'Already subscribed' });
+        return;
       }
 
       if (existing && !existing.isActive) {
@@ -92,7 +99,7 @@ router.post(
         message: 'Successfully subscribed to our newsletter!',
       });
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );

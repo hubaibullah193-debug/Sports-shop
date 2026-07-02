@@ -15,7 +15,6 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, getTotalPrice } = useCartStore();
   const { isAuthenticated } = useAuthStore();
-  const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({

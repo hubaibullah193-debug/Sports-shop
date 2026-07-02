@@ -1,8 +1,18 @@
-import { Response, NextFunction } from 'express';
+import { Response, NextFunction, Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { AuthRequest, UnauthorizedError } from '../types/errors';
+import { UnauthorizedError } from '../types/errors';
 
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+export interface AuthRequest extends Request {
+  user?: JwtPayload;
+}
+
+export interface JwtPayload {
+  id: string;
+  email: string;
+  role: string;
+}
+
+export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
 
@@ -10,7 +20,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
       throw new UnauthorizedError('No token provided');
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as JwtPayload;
     req.user = {
       id: decoded.id,
       email: decoded.email,
@@ -20,23 +30,27 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({ error: 'Token expired' });
+      res.status(401).json({ error: 'Token expired' });
+      return;
     }
     if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({ error: 'Invalid token' });
+      res.status(401).json({ error: 'Invalid token' });
+      return;
     }
     next(error);
   }
 };
 
 export const authorize = (...roles: string[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      return res.status(401).json({ error: 'Not authenticated' });
+      res.status(401).json({ error: 'Not authenticated' });
+      return;
     }
 
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Not authorized' });
+      res.status(403).json({ error: 'Not authorized' });
+      return;
     }
 
     next();

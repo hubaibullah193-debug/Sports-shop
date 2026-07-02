@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { formatPrice } from '@/utils/helpers';
@@ -8,8 +7,7 @@ import { Button } from '@/components/Button';
 import { Container, Section } from '@/components/Layout';
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const { items, removeItem, updateQuantity, getTotalPrice } = useCartStore();
 
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.1;

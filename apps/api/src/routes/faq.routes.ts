@@ -1,45 +1,46 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import prisma from '../utils/prisma';
 
 const router = Router();
 
 // Get all FAQs by category
-router.get('/', async (req: any, res: Response) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { category } = req.query;
+    const { category } = req.query as { category?: string };
 
-    const where = { isActive: true };
+    const where: any = { isActive: true };
     if (category) {
-      Object.assign(where, { category });
+      where.category = category;
     }
 
-    const faqs = await prisma.faq.findMany({
+    const faqs = await prisma.fAQ.findMany({
       where,
       orderBy: { order: 'asc' },
     });
 
     res.json(faqs);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get FAQ by ID
-router.get('/:id', async (req: any, res: Response) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
-    const faq = await prisma.faq.findUnique({
+    const faq = await prisma.fAQ.findUnique({
       where: { id },
     });
 
     if (!faq) {
-      return res.status(404).json({ error: 'FAQ not found' });
+      res.status(404).json({ error: 'FAQ not found' });
+      return;
     }
 
     res.json(faq);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 

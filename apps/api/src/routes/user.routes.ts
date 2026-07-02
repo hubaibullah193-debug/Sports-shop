@@ -1,12 +1,12 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../utils/prisma';
-import { authenticate } from '../middleware/auth';
-import { AuthRequest, NotFoundError, ValidationError } from '../types/errors';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { NotFoundError, ValidationError } from '../types/errors';
 
 const router = Router();
 
-const validateRequest = (req: any, res: Response) => {
+const validateRequest = (req: any): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new ValidationError('Validation failed', errors.array());
@@ -14,7 +14,7 @@ const validateRequest = (req: any, res: Response) => {
 };
 
 // Get user profile
-router.get('/profile', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/profile', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user!.id },
@@ -30,7 +30,7 @@ router.get('/profile', authenticate, async (req: AuthRequest, res: Response) => 
 
     res.json(user);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
@@ -41,12 +41,18 @@ router.put(
   [
     body('firstName').optional().notEmpty(),
     body('lastName').optional().notEmpty(),
-    body('phone').optional().isMobilePhone(),
+    body('phone').optional().isMobilePhone('any'),
   ],
-  async (req: AuthRequest, res: Response) => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validateRequest(req, res);
-      const { firstName, lastName, phone, gender, dateOfBirth } = req.body;
+      validateRequest(req);
+      const { firstName, lastName, phone, gender, dateOfBirth } = req.body as {
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+        gender?: string;
+        dateOfBirth?: string;
+      };
 
       const user = await prisma.user.update({
         where: { id: req.user!.id },
@@ -54,20 +60,20 @@ router.put(
           firstName,
           lastName,
           phone,
-          gender,
+          gender: gender as any, // Matches Gender enum
           dateOfBirth,
         },
       });
 
       res.json(user);
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );
 
 // Get user addresses
-router.get('/addresses', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/addresses', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const addresses = await prisma.address.findMany({
       where: { userId: req.user!.id },
@@ -75,7 +81,7 @@ router.get('/addresses', authenticate, async (req: AuthRequest, res: Response) =
 
     res.json(addresses);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
@@ -91,10 +97,18 @@ router.post(
     body('postalCode').notEmpty(),
     body('country').notEmpty(),
   ],
-  async (req: AuthRequest, res: Response) => {
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-      validateRequest(req, res);
-      const { type, street, city, state, postalCode, country, isDefault } = req.body;
+      validateRequest(req);
+      const { type, street, city, state, postalCode, country, isDefault } = req.body as {
+        type: string;
+        street: string;
+        city: string;
+        state: string;
+        postalCode: string;
+        country: string;
+        isDefault?: boolean;
+      };
 
       const address = await prisma.address.create({
         data: {
@@ -111,13 +125,13 @@ router.post(
 
       res.status(201).json(address);
     } catch (error) {
-      throw error;
+      next(error);
     }
   }
 );
 
 // Get wishlist
-router.get('/wishlist', authenticate, async (req: AuthRequest, res: Response) => {
+router.get('/wishlist', authenticate, async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const wishlist = await prisma.wishlistItem.findMany({
       where: { userId: req.user!.id },
@@ -130,59 +144,68 @@ router.get('/wishlist', authenticate, async (req: AuthRequest, res: Response) =>
 
     res.json(wishlist);
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Add to wishlist
-router.post('/wishlist/:productId', authenticate, async (req: AuthRequest, res: Response) => {
-  try {
-    const { productId } = req.params;
+router.post(
+  '/wishlist/:productId',
+  authenticate,
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { productId } = req.params as { productId: string };
 
-    const existing = await prisma.wishlistItem.findUnique({
-      where: {
-        userId_productId: {
+      const existing = await prisma.wishlistItem.findUnique({
+        where: {
+          userId_productId: {
+            userId: req.user!.id,
+            productId,
+          },
+        },
+      });
+
+      if (existing) {
+        res.status(400).json({ error: 'Already in wishlist' });
+        return;
+      }
+
+      const item = await prisma.wishlistItem.create({
+        data: {
           userId: req.user!.id,
           productId,
         },
-      },
-    });
+      });
 
-    if (existing) {
-      return res.status(400).json({ error: 'Already in wishlist' });
+      res.status(201).json(item);
+    } catch (error) {
+      next(error);
     }
-
-    const item = await prisma.wishlistItem.create({
-      data: {
-        userId: req.user!.id,
-        productId,
-      },
-    });
-
-    res.status(201).json(item);
-  } catch (error) {
-    throw error;
   }
-});
+);
 
 // Remove from wishlist
-router.delete('/wishlist/:productId', authenticate, async (req: AuthRequest, res: Response) => {
-  try {
-    const { productId } = req.params;
+router.delete(
+  '/wishlist/:productId',
+  authenticate,
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { productId } = req.params as { productId: string };
 
-    await prisma.wishlistItem.delete({
-      where: {
-        userId_productId: {
-          userId: req.user!.id,
-          productId,
+      await prisma.wishlistItem.delete({
+        where: {
+          userId_productId: {
+            userId: req.user!.id,
+            productId,
+          },
         },
-      },
-    });
+      });
 
-    res.json({ message: 'Removed from wishlist' });
-  } catch (error) {
-    throw error;
+      res.json({ message: 'Removed from wishlist' });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 export default router;

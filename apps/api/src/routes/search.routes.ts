@@ -1,17 +1,16 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction, Request } from 'express';
 import prisma from '../utils/prisma';
-import { authenticate } from '../middleware/auth';
-import { AuthRequest } from '../types/errors';
 
 const router = Router();
 
 // Search products
-router.get('/search', async (req: AuthRequest, res: Response) => {
+router.get('/search', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { q, take = 10 } = req.query;
+    const { q, take = '10' } = req.query as { q?: string; take?: string };
 
     if (!q || typeof q !== 'string') {
-      return res.json({ results: [] });
+      res.json({ results: [] });
+      return;
     }
 
     const results = await prisma.product.findMany({
@@ -33,17 +32,18 @@ router.get('/search', async (req: AuthRequest, res: Response) => {
 
     res.json({ results });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
 // Get suggestions (autocomplete)
-router.get('/suggestions', async (req: AuthRequest, res: Response) => {
+router.get('/suggestions', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { q } = req.query;
+    const { q } = req.query as { q?: string };
 
     if (!q || typeof q !== 'string') {
-      return res.json({ suggestions: [] });
+      res.json({ suggestions: [] });
+      return;
     }
 
     const products = await prisma.product.findMany({
@@ -64,13 +64,13 @@ router.get('/suggestions', async (req: AuthRequest, res: Response) => {
     });
 
     const suggestions = [
-      ...products.map((p) => ({ text: p.name, type: 'product' })),
-      ...categories.map((c) => ({ text: c.name, type: 'category' })),
+      ...products.map((p: any) => ({ text: p.name, type: 'product' })),
+      ...categories.map((c: any) => ({ text: c.name, type: 'category' })),
     ];
 
     res.json({ suggestions });
   } catch (error) {
-    throw error;
+    next(error);
   }
 });
 
