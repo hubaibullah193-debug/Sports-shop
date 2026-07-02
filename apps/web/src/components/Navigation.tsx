@@ -14,7 +14,7 @@ export const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-primary">
-            Elite Sports
+            Hubaib's Sports
           </Link>
 
           {/* Desktop Menu */}

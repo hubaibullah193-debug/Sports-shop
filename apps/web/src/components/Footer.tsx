@@ -10,7 +10,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About */}
           <div>
-            <h3 className="text-lg font-bold mb-4">Elite Sports</h3>
+            <h3 className="text-lg font-bold mb-4">Hubaib's Sports and Stationary</h3>
             <p className="text-sm text-dark-300">
               Premium sports equipment, stationery, and professional printing services.
             </p>
@@ -86,7 +86,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-dark-700 mt-12 pt-8 text-center text-sm text-dark-300">
-          <p>&copy; 2026 Elite Sports Store. All rights reserved.</p>
+          <p>&copy; 2026 Hubaib's Sports and Stationary. All rights reserved.</p>
         </div>
       </div>
     </footer>

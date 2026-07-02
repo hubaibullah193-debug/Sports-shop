@@ -43,7 +43,7 @@ export default function Home() {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              Premium Sports & Stationery Store
+              Hubaib's Sports and Stationary House
             </h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90">
               Discover high-quality products for sports, office, and professional printing

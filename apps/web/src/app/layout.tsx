@@ -7,20 +7,20 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Elite Sports Store - Premium Sports Equipment & Stationery',
+  title: "Hubaib's Sports and Stationary - Premium Sports Equipment & Stationery",
   description:
     'Shop high-quality sports equipment, stationery, and professional printing services. Premium products at competitive prices.',
   keywords: 'sports equipment, stationery, printing services, online shop',
   viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
-  authors: [{ name: 'Elite Sports' }],
+  authors: [{ name: "Hubaib's Sports and Stationary" }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://elitesports.com',
-    title: 'Elite Sports Store',
+    url: 'https://hubaibsports.com',
+    title: "Hubaib's Sports and Stationary",
     description: 'Premium Sports Equipment & Stationery',
-    images: [{ url: 'https://elitesports.com/og-image.jpg' }],
+    images: [{ url: 'https://hubaibsports.com/og-image.jpg' }],
   },
 };
 

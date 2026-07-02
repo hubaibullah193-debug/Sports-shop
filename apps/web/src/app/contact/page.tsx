@@ -66,12 +66,13 @@ export default function ContactPage() {
 
               <div>
                 <h3 className="text-lg font-bold mb-2">📞 Call Us</h3>
-                <p className="text-gray-600">(555) 123-4567</p>
+                <p className="text-gray-600">03458979767 (WhatsApp Priority)</p>
+                <p className="text-gray-600">03470954961</p>
               </div>
 
               <div>
                 <h3 className="text-lg font-bold mb-2">📧 Email</h3>
-                <p className="text-gray-600">info@elitesports.com</p>
+                <p className="text-gray-600">hubaibullah193@gmail.com</p>
               </div>
 
               <div>

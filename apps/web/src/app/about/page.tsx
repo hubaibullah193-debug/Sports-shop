@@ -8,7 +8,7 @@ const teamMembers = [
     name: 'John Smith',
     role: 'Founder & CEO',
     image: '👨‍💼',
-    bio: 'With 20+ years in retail, John founded Elite Sports to deliver premium quality at fair prices.',
+    bio: "With 20+ years in retail, Hubaib founded Hubaib's Sports and Stationary to deliver premium quality at fair prices.",
   },
   {
     name: 'Sarah Johnson',
@@ -41,7 +41,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-2xl mx-auto"
           >
-            <h1 className="heading-lg mb-4">About Elite Sports</h1>
+            <h1 className="heading-lg mb-4">About Hubaib's Sports and Stationary</h1>
             <p className="text-xl text-gray-600">
               Your trusted partner for premium sports equipment, quality stationery, and
               professional printing services since 2010

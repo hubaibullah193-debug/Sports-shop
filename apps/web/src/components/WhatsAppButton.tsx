@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const WhatsAppButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const whatsappNumber = '+1234567890'; // Replace with your WhatsApp number
+  const whatsappNumber = '+923458979767'; // Hubaib's WhatsApp (primary)
 
   const message = encodeURIComponent(
     'Hello! I would like to inquire about your products and services.'
@@ -63,10 +63,10 @@ export const WhatsAppButton = () => {
                 Message on WhatsApp
               </a>
               <a
-                href="tel:+1234567890"
+                href="tel:+923458979767"
                 className="block text-center bg-blue-500 text-white py-2 rounded font-semibold hover:bg-blue-600 transition"
               >
-                Call Us
+                Call Us (WhatsApp Priority)
               </a>
             </div>
           </motion.div>
