@@ -1,0 +1,87 @@
+import { Router, Response } from 'express';
+import { body, validationResult } from 'express-validator';
+import prisma from '../utils/prisma';
+import { authenticate } from '../middleware/auth';
+import { AuthRequest, ValidationError } from '../types/errors';
+
+const router = Router();
+
+const validateRequest = (req: any) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new ValidationError('Validation failed', errors.array());
+  }
+};
+
+// Add review
+router.post(
+  '/',
+  authenticate,
+  [
+    body('productId').notEmpty(),
+    body('rating').isInt({ min: 1, max: 5 }),
+    body('title').notEmpty(),
+  ],
+  async (req: AuthRequest, res: Response) => {
+    try {
+      validateRequest(req);
+      const { productId, rating, title, comment } = req.body;
+
+      const review = await prisma.review.create({
+        data: {
+          userId: req.user!.id,
+          productId,
+          rating,
+          title,
+          comment,
+          isVerified: true,
+        },
+      });
+
+      res.status(201).json({
+        message: 'Review added successfully',
+        review,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+// Get product reviews
+router.get('/product/:productId', async (req: AuthRequest, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const { skip = 0, take = 10 } = req.query;
+
+    const reviews = await prisma.review.findMany({
+      where: { productId },
+      skip: Number(skip),
+      take: Number(take),
+      include: {
+        user: { select: { firstName: true, lastName: true, avatar: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const total = await prisma.review.count({ where: { productId } });
+    const avgRating = await prisma.review.aggregate({
+      where: { productId },
+      _avg: { rating: true },
+    });
+
+    res.json({
+      reviews,
+      avgRating: avgRating._avg.rating,
+      pagination: {
+        total,
+        skip: Number(skip),
+        take: Number(take),
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+});
+
+export default router;

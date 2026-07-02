@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: elite_sports
+      POSTGRES_PASSWORD: secure_password_123
+      POSTGRES_DB: elite_sports
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U elite_sports']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    environment:
+      DATABASE_URL: postgresql://elite_sports:secure_password_123@postgres:5432/elite_sports
+      JWT_SECRET: development-secret-key-change-in-production
+      CLIENT_URL: http://localhost:3000
+      NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./apps/api/src:/app/src
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:5000
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web/src:/app/src
+
+volumes:
+  postgres_data:
