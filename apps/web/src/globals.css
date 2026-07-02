@@ -11,17 +11,17 @@ html {
 }
 
 :root {
-  --primary: #1E40AF;
-  --secondary: #059669;
-  --accent: #D97706;
+  --primary: #1a3a52;
+  --secondary: #0E9B8A;
+  --accent: #D4AF37;
   --background: #f8f9fa;
   --text: #212529;
 }
 
 .dark {
-  --primary: #3B82F6;
-  --secondary: #10B981;
-  --accent: #F59E0B;
+  --primary: #2d5a7b;
+  --secondary: #20B2AA;
+  --accent: #E6C200;
   --background: #0f1419;
   --text: #e0e6ed;
 }
