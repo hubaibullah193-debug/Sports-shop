@@ -60,8 +60,8 @@ export default function ContactPage() {
             >
               <div>
                 <h3 className="text-lg font-bold mb-2">📍 Visit Us</h3>
-                <p className="text-gray-600">123 Business Street</p>
-                <p className="text-gray-600">New York, NY 10001</p>
+                <p className="text-gray-600">Adda Bazar Danishkool Road</p>
+                <p className="text-gray-600">Pandiali, Distt Mohmand</p>
               </div>
 
               <div>

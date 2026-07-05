@@ -1,0 +1,14 @@
+# Claude Development Guide - Quick Reference
+
+**Elite Sports Store**: Next.js 14 + Express + PostgreSQL monorepo. Frontend in `apps/web`, backend in `apps/api`.
+
+1. **TypeScript Strict**: No `any` types, define interfaces for all data, use null checks (`?.`, `??`)
+2. **React**: Use `'use client'`, Framer Motion for animations, Tailwind for styling, Zustand for state
+3. **Express**: Validate input with express-validator, use middleware (auth, error handler), throw errors for middleware to catch
+4. **Database**: Use Prisma for all queries, transactions for multi-step ops, include relations as needed
+5. **Security**: Hash passwords (bcrypt), validate frontend + backend, use JWT tokens, environment variables for secrets
+6. **Performance**: Next Image, lazy loading, pagination, code splitting, optimize bundle with `npm run build`
+7. **File Organization**: Pages in `apps/web/src/app/[path]/page.tsx`, APIs in `apps/api/src/routes/[name].routes.ts`, components in `@/components`
+8. **Workflow**: Branch → Type-check → Lint → Test → Commit → Push → PR. Run `npm run dev` for local dev, `npm run build` before deploy
+9. **Error Handling**: Use custom error classes (NotFoundError, ValidationError), backend error handler responds with proper HTTP status codes
+10. **Testing**: Unit tests for utils, integration tests for APIs, React Testing Library for components. Test before committing.
