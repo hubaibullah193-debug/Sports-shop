@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FiArrowRight } from 'react-icons/fi';
+import { FiArrowRight, FiMessageCircle } from 'react-icons/fi';
 import { Button } from '@/components/Button';
 import { Container, Section } from '@/components/Layout';
 
@@ -168,6 +168,14 @@ export const HeroSection3D = () => {
             <Button variant="primary" size="lg">
               Shop Now <FiArrowRight />
             </Button>
+            <a
+              href="https://wa.me/923458979767?text=Hello%20Hubaib's%20Sports%20and%20Stationery%20House!%20I%20would%20like%20to%20inquire%20about%20your%20products%20and%20services."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white bg-green-500 hover:bg-green-600 transition-all duration-300 hover:-translate-y-0.5 active:scale-95 shadow-lg hover:shadow-xl"
+            >
+              <FiMessageCircle /> Chat on WhatsApp
+            </a>
             <Button variant="ghost" size="lg">
               Explore Printing
             </Button>

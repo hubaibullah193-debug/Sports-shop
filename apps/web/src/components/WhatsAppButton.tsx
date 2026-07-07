@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const WhatsAppButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const whatsappNumber = '+923458979767'; // Hubaib's WhatsApp (primary)
+  const whatsappNumber = '+923458979767'; // Hubaib's WhatsApp (0345-8979767)
 
   const message = encodeURIComponent(
     'Hello! I would like to inquire about your products and services.'
