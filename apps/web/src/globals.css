@@ -10,41 +10,54 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: linear-gradient(135deg, var(--background) 0%, #fcf8f1 100%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
 :root {
-  --primary: #1a3a52;
-  --secondary: #0E9B8A;
-  --accent: #D4AF37;
-  --background: #ffffff;
-  --text: #212529;
+  --primary: #163a4f;
+  --secondary: #2d8f81;
+  --accent: #c8a24b;
+  --background: #f7f4ee;
+  --text: #1f2937;
 }
 
 .dark {
   --primary: #2d5a7b;
   --secondary: #20B2AA;
   --accent: #E6C200;
-  --background: #1a202c;
+  --background: #111827;
   --text: #e0e6ed;
+}
+
+::selection {
+  background: rgba(45, 143, 129, 0.25);
+  color: #111827;
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 active:scale-95;
+    @apply px-6 py-3 rounded-full font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95;
+    background: linear-gradient(135deg, var(--primary), #2f5d74);
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-secondary text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 active:scale-95;
+    @apply px-6 py-3 rounded-full font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95;
+    background: linear-gradient(135deg, var(--secondary), #39b29c);
   }
 
   .card {
-    @apply bg-white rounded-xl shadow hover:shadow-lg transition-shadow duration-300 p-6;
+    @apply rounded-2xl border border-[#e8dfce] bg-[#fcfaf7] shadow-soft p-6 transition-shadow duration-300 hover:shadow-soft-lg;
   }
 
   .glass {
-    @apply bg-white/40 backdrop-blur-md border border-white/20 rounded-xl;
+    @apply rounded-2xl border border-white/70 bg-white/70 backdrop-blur-xl shadow-soft;
   }
 
   .input-base {
-    @apply w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+    @apply w-full px-4 py-3 rounded-full border border-[#d9cfbc] bg-[#fdfcf8] text-text focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
   }
 
   .heading-lg {
@@ -68,11 +81,11 @@ html {
   }
   /* Dark mode overrides */
   .dark .card {
-    @apply bg-slate-800;
+    @apply border-slate-700 bg-slate-800;
   }
 
   .dark .glass {
-    @apply bg-white/10;
+    @apply border-white/10 bg-white/10;
   }
 
   .dark .input-base {
