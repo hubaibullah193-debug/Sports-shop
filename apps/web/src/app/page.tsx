@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
 import { Button } from '@/components/Button';
 import { FiStar, FiTruck, FiShield } from 'react-icons/fi';
-import { HeroSection3D } from '@/components/HeroSection3D';
+import { HeroBanner } from '@/components/HeroBanner';
 
 export default function Home() {
   const features = [
@@ -34,8 +34,8 @@ export default function Home() {
 
   return (
     <>
-      {/* 3D Hero Section */}
-      <HeroSection3D />
+      {/* Premium Hero Banner */}
+      <HeroBanner />
 
       {/* Features */}
       <Section>
