@@ -3,7 +3,8 @@
 import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
 import { Button } from '@/components/Button';
-import { FiArrowRight, FiStar, FiTruck, FiShield } from 'react-icons/fi';
+import { FiStar, FiTruck, FiShield } from 'react-icons/fi';
+import { HeroSection3D } from '@/components/HeroSection3D';
 
 export default function Home() {
   const features = [
@@ -33,32 +34,8 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero Section */}
-      <Section className="bg-gradient-to-r from-primary via-secondary to-accent text-white py-24">
-        <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              Hubaib's Sports and Stationary House
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
-              Discover high-quality products for sports, office, and professional printing
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button variant="primary" size="lg">
-                Shop Now <FiArrowRight />
-              </Button>
-              <Button variant="ghost" size="lg">
-                Explore Printing
-              </Button>
-            </div>
-          </motion.div>
-        </Container>
-      </Section>
+      {/* 3D Hero Section */}
+      <HeroSection3D />
 
       {/* Features */}
       <Section>
