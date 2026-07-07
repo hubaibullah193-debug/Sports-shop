@@ -39,21 +39,37 @@ body {
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 rounded-full font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95;
+    @apply px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-95;
     background: linear-gradient(135deg, var(--primary), #2f5d74);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
   }
 
   .btn-secondary {
-    @apply px-6 py-3 rounded-full font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft-lg active:scale-95;
+    @apply px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-95;
     background: linear-gradient(135deg, var(--secondary), #39b29c);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .btn-secondary:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
   }
 
   .card {
-    @apply rounded-2xl border border-[#e8dfce] bg-[#fcfaf7] shadow-soft p-6 transition-shadow duration-300 hover:shadow-soft-lg;
+    @apply rounded-2xl border border-[#e8dfce] bg-[#fcfaf7] p-6 transition-shadow duration-300;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
   }
 
   .glass {
-    @apply rounded-2xl border border-white/70 bg-white/70 backdrop-blur-xl shadow-soft;
+    @apply rounded-2xl border border-white/70 bg-white/70 backdrop-blur-xl;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   .input-base {
