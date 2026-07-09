@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { formatPrice } from '@/utils/helpers';
@@ -36,9 +37,11 @@ export default function CartPage() {
                   className="card flex gap-4"
                 >
                   {item.product?.images?.[0] && (
-                    <img
+                    <Image
                       src={item.product.images[0].url}
                       alt={item.product.name}
+                      width={96}
+                      height={96}
                       className="w-24 h-24 object-cover rounded"
                     />
                   )}

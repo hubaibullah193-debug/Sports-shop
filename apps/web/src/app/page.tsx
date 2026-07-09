@@ -156,7 +156,7 @@ export default function Home() {
             <span className="badge badge-secondary mb-4">Why Choose Us</span>
             <h2 className="heading-md mb-4">Why Customers Trust HUBAIB</h2>
             <p className="body-lg text-text-light max-w-2xl mx-auto">
-              We've been serving the community with quality products and professional services for years
+              We&apos;ve been serving the community with quality products and professional services for years
             </p>
           </motion.div>
 
@@ -314,7 +314,7 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="text-5xl mb-4 opacity-40">
-                  "
+                  &quot;
                 </div>
                 <p className="body-md mb-6 opacity-90">{testimonial.text}</p>
                 <div className="border-t border-white/10 pt-4">

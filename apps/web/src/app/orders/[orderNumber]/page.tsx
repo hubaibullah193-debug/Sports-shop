@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
@@ -42,7 +43,7 @@ export default function OrderDetailPage() {
 
   useEffect(() => {
     fetchOrder();
-  }, [orderNumber]);
+  }, [orderNumber, fetchOrder]);
 
   const fetchOrder = async () => {
     try {
@@ -170,9 +171,11 @@ export default function OrderDetailPage() {
             {order.items.map((item) => (
               <div key={item.id} className="card flex gap-4">
                 {item.product.images?.[0] && (
-                  <img
+                  <Image
                     src={item.product.images[0].url}
                     alt={item.product.name}
+                    width={96}
+                    height={96}
                     className="w-24 h-24 object-cover rounded"
                   />
                 )}

@@ -52,7 +52,7 @@ export const WhatsAppButton = () => {
             </div>
             <div className="p-4 space-y-3">
               <p className="text-sm text-gray-600 dark:text-dark-200">
-                Have questions? We're here to help!
+                Have questions? We&apos;re here to help!
               </p>
               <a
                 href={whatsappLink}

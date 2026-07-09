@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiSearch, FiX } from 'react-icons/fi';
 import Link from 'next/link';
@@ -91,9 +92,11 @@ export const SearchBox = () => {
                   className="flex gap-3 p-3 hover:bg-gray-50 dark:hover:bg-dark-700 border-b last:border-b-0 transition"
                 >
                   {result.images?.[0] && (
-                    <img
+                    <Image
                       src={result.images[0].url}
                       alt={result.name}
+                      width={40}
+                      height={40}
                       className="w-10 h-10 object-cover rounded"
                     />
                   )}

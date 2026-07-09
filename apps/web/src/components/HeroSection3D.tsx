@@ -145,7 +145,7 @@ export const HeroSection3D = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            Hubaib's Sports and Stationary House
+            Hubaib&apos;s Sports and Stationary House
           </motion.h1>
 
           {/* Animated Subtitle */}

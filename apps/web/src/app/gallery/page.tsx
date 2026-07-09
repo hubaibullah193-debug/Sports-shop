@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
 import apiClient from '@/utils/api';
@@ -21,7 +22,7 @@ export default function GalleryPage() {
   useEffect(() => {
     fetchCategories();
     fetchImages();
-  }, [selectedCategory]);
+  }, [selectedCategory, fetchImages]);
 
   const fetchCategories = async () => {
     try {
@@ -110,9 +111,11 @@ export default function GalleryPage() {
                   className="rounded-lg overflow-hidden cursor-pointer group"
                 >
                   <div className="relative h-48 overflow-hidden bg-gray-100">
-                    <img
+                    <Image
                       src={image.imageUrl}
                       alt={image.title}
+                      width={400}
+                      height={192}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition duration-300 flex items-center justify-center">

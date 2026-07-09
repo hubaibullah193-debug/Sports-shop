@@ -99,7 +99,7 @@ export default function ContactPage() {
             <span className="badge badge-accent mb-4">Get in Touch</span>
             <h1 className="heading-lg text-white mb-6">Contact HUBAIB</h1>
             <p className="body-lg text-gray-100">
-              We'd love to hear from you. Whether you have questions about our products or need a custom printing quote, we're here to help.
+              We&apos;d love to hear from you. Whether you have questions about our products or need a custom printing quote, we&apos;re here to help.
             </p>
           </motion.div>
         </Container>
@@ -219,7 +219,7 @@ export default function ContactPage() {
             >
               <h2 className="heading-sm mb-2">Send us a Message</h2>
               <p className="body-sm text-text-light mb-8">
-                Fill out the form below and we'll get back to you as soon as possible.
+                Fill out the form below and we&apos;ll get back to you as soon as possible.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -364,7 +364,7 @@ export default function ContactPage() {
           >
             <h2 className="heading-md text-white mb-6">Prefer to Reach Us Directly?</h2>
             <p className="body-lg opacity-90 mb-8">
-              We're available via phone and WhatsApp during business hours. We'll respond to all inquiries promptly.
+              We&apos;re available via phone and WhatsApp during business hours. We&apos;ll respond to all inquiries promptly.
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <a href="tel:03458979767">

@@ -32,7 +32,7 @@ export default function AdminOrdersPage() {
     }
 
     fetchOrders();
-  }, [user, router, statusFilter]);
+  }, [user, router, statusFilter, fetchOrders]);
 
   const fetchOrders = async () => {
     try {

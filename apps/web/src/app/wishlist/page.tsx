@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
 import { Button } from '@/components/Button';
@@ -76,9 +77,11 @@ export default function WishlistPage() {
               >
                 <div className="relative overflow-hidden rounded-lg mb-4 h-48 bg-gray-100">
                   {item.product.images?.[0] && (
-                    <img
+                    <Image
                       src={item.product.images[0].url}
                       alt={item.product.name}
+                      width={400}
+                      height={192}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                   )}

@@ -469,7 +469,7 @@ export default function PrintingPage() {
                   </div>
 
                   <p className="text-xs text-text-light text-center">
-                    We'll review your request and contact you within 24 hours with a detailed quote.
+                    We&apos;ll review your request and contact you within 24 hours with a detailed quote.
                   </p>
                 </form>
               </div>

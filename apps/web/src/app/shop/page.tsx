@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
@@ -28,7 +29,7 @@ export default function ShopPage() {
 
   useEffect(() => {
     fetchProducts();
-  }, [filters]);
+  }, [filters, fetchProducts]);
 
   const fetchProducts = async () => {
     try {
@@ -139,9 +140,11 @@ export default function ShopPage() {
                       <Link href={`/products/${product.slug}`}>
                         <div className="relative overflow-hidden rounded-lg mb-4 h-48 bg-gray-100">
                           {product.images?.[0] && (
-                            <img
+                            <Image
                               src={product.images[0].url}
                               alt={product.name}
+                              width={400}
+                              height={192}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             />
                           )}

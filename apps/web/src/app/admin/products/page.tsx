@@ -32,7 +32,7 @@ export default function AdminProductsPage() {
     }
 
     fetchProducts();
-  }, [user, router, skip]);
+  }, [user, router, skip, fetchProducts]);
 
   const fetchProducts = async () => {
     try {

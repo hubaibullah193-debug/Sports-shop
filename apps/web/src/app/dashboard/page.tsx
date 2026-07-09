@@ -115,7 +115,7 @@ export default function DashboardPage() {
             </div>
           ) : orders.length === 0 ? (
             <div className="card text-center py-12">
-              <p className="text-gray-600 mb-4">You haven't placed any orders yet.</p>
+              <p className="text-gray-600 mb-4">You haven&apos;t placed any orders yet.</p>
               <Button onClick={() => router.push('/shop')}>Start Shopping</Button>
             </div>
           ) : (

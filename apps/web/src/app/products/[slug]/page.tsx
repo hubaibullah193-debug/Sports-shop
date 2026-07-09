@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Container, Section } from '@/components/Layout';
@@ -22,7 +23,7 @@ export default function ProductPage() {
 
   useEffect(() => {
     fetchProduct();
-  }, [slug]);
+  }, [slug, fetchProduct]);
 
   const fetchProduct = async () => {
     try {
@@ -75,9 +76,11 @@ export default function ProductPage() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <div className="mb-4 bg-gray-100 rounded-lg overflow-hidden h-96">
                 {product.images?.[selectedImage] && (
-                  <img
+                  <Image
                     src={product.images[selectedImage].url}
                     alt={product.name}
+                    width={600}
+                    height={384}
                     className="w-full h-full object-cover"
                   />
                 )}
@@ -95,9 +98,11 @@ export default function ProductPage() {
                           : 'border-gray-300'
                       }`}
                     >
-                      <img
+                      <Image
                         src={img.url}
                         alt={`View ${idx + 1}`}
+                        width={80}
+                        height={80}
                         className="w-full h-full object-cover"
                       />
                     </button>
