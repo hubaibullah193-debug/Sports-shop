@@ -41,10 +41,6 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchOrder();
-  }, [orderNumber, fetchOrder]);
-
   const fetchOrder = async () => {
     try {
       const response = await apiClient.get(`/api/orders/${orderNumber}`);
@@ -55,6 +51,10 @@ export default function OrderDetailPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchOrder();
+  }, [orderNumber, fetchOrder]);
 
   if (isLoading) {
     return (

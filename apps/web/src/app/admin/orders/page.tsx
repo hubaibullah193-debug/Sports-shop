@@ -25,15 +25,6 @@ export default function AdminOrdersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
 
-  useEffect(() => {
-    if (user?.role !== 'ADMIN') {
-      router.push('/');
-      return;
-    }
-
-    fetchOrders();
-  }, [user, router, statusFilter, fetchOrders]);
-
   const fetchOrders = async () => {
     try {
       const response = await apiClient.get('/api/admin/orders', {
@@ -46,6 +37,15 @@ export default function AdminOrdersPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user?.role !== 'ADMIN') {
+      router.push('/');
+      return;
+    }
+
+    fetchOrders();
+  }, [user, router, statusFilter, fetchOrders]);
 
   const statuses = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 

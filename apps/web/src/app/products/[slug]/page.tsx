@@ -21,10 +21,6 @@ export default function ProductPage() {
   const [isLoading, setIsLoading] = useState(true);
   const { addItem } = useCartStore();
 
-  useEffect(() => {
-    fetchProduct();
-  }, [slug, fetchProduct]);
-
   const fetchProduct = async () => {
     try {
       setIsLoading(true);
@@ -37,6 +33,10 @@ export default function ProductPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProduct();
+  }, [slug, fetchProduct]);
 
   if (isLoading) {
     return (

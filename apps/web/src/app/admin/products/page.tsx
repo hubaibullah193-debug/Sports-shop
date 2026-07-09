@@ -25,15 +25,6 @@ export default function AdminProductsPage() {
   const [skip, setSkip] = useState(0);
   const take = 20;
 
-  useEffect(() => {
-    if (user?.role !== 'ADMIN') {
-      router.push('/');
-      return;
-    }
-
-    fetchProducts();
-  }, [user, router, skip, fetchProducts]);
-
   const fetchProducts = async () => {
     try {
       const response = await apiClient.get('/api/admin/products', {
@@ -46,6 +37,15 @@ export default function AdminProductsPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user?.role !== 'ADMIN') {
+      router.push('/');
+      return;
+    }
+
+    fetchProducts();
+  }, [user, router, skip, fetchProducts]);
 
   return (
     <Container>

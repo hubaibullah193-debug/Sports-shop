@@ -19,11 +19,6 @@ export default function GalleryPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchCategories();
-    fetchImages();
-  }, [selectedCategory, fetchImages]);
-
   const fetchCategories = async () => {
     try {
       const response = await apiClient.get('/api/gallery/categories');
@@ -45,6 +40,11 @@ export default function GalleryPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchImages();
+  }, [selectedCategory, fetchImages]);
 
   return (
     <>

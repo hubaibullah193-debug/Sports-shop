@@ -27,10 +27,6 @@ export default function ShopPage() {
     search: '',
   });
 
-  useEffect(() => {
-    fetchProducts();
-  }, [filters, fetchProducts]);
-
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
@@ -44,6 +40,10 @@ export default function ShopPage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [filters, fetchProducts]);
 
   return (
     <>
