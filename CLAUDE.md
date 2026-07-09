@@ -372,6 +372,7 @@ git add .
 git commit -m "feat: add feature description"
 ```
 
+
 ### Deploying
 ```bash
 # 1. Build locally
@@ -460,3 +461,4 @@ When working on this project:
 **Last Updated**: 2026-07-02  
 **By**: Claude Code  
 **Status**: Active Development
+

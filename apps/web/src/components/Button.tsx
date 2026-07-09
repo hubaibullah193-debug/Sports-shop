@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 interface ButtonProps {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   disabled?: boolean;
@@ -24,12 +24,14 @@ export const Button = ({
   className = '',
   type = 'button',
 }: ButtonProps) => {
-  const baseClass = 'font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2';
+  const baseClass = 'font-semibold font-heading rounded-lg transition-all duration-300 flex items-center justify-center gap-2';
 
   const variantClass = {
-    primary: 'bg-primary text-white hover:shadow-lg active:scale-95',
-    secondary: 'bg-secondary text-white hover:shadow-lg active:scale-95',
-    ghost: 'bg-transparent border-2 border-primary text-primary hover:bg-primary/5',
+    primary: 'btn-primary',
+    secondary: 'btn-secondary',
+    accent: 'btn-accent',
+    outline: 'btn-outline',
+    ghost: 'bg-transparent text-primary hover:bg-primary/5 border-2 border-primary',
   };
 
   const sizeClass = {
@@ -43,8 +45,8 @@ export const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: disabled ? 1 : 1.02 }}
+      whileTap={{ scale: disabled ? 1 : 0.98 }}
       className={`${baseClass} ${variantClass[variant]} ${sizeClass[size]} ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       } ${className}`}
