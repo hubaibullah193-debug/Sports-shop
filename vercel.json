@@ -1,15 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "cd apps/web && npm run build",
-  "outputDirectory": "apps/web/.next",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
   "public": true,
+  "installCommand": "npm install",
   "env": {
     "NEXT_PUBLIC_API_URL": "@next_public_api_url"
   },
-  "regions": ["iad1"],
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  "regions": ["iad1"]
 }
